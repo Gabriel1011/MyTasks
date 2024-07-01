@@ -1,0 +1,123 @@
+# Arquivos e diretórios específicos do Flutter/Dart
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+flutter_*.png
+linked_*.ds
+unlinked.ds
+unlinked_spec.ds
+
+# Arquivos específicos do Android
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+*.jks
+
+# Arquivos específicos do iOS/XCode
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Arquivos específicos do macOS
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/Flutter-Debug.xcconfig
+**/macos/Flutter/Flutter-Release.xcconfig
+**/macos/Flutter/Flutter-Profile.xcconfig
+
+# Arquivos de cobertura
+coverage/
+
+# Pacotes
+*.tar.gz
+*.zip
+
+# Arquivos temporários
+*.log
+*.log.*
+*.tmp
+*.temp
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos do Android Studio
+*.iml
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Arquivos do VS Code
+.vscode/
+*.code-workspace
+
+# Arquivos do IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Arquivos do Xcode
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Arquivos do Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# Arquivos específicos do projeto (adicione conforme necessário)
+# config.json
+# secrets.yaml
