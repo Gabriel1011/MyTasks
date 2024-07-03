@@ -1,78 +1,19 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_tasks_app/firebase_options.dart';
-import 'package:my_tasks_app/repositories/task_repository.dart';
+import 'package:my_tasks_app/shared/models/task.dart';
+import 'package:my_tasks_app/shared/widgets/task_list.dart';
 import 'package:window_manager/window_manager.dart';
+import '../../../shared/repositories/task_repository.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await windowManager.ensureInitialized();
-
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(350, 400),
-    minimumSize: Size(100, 100),
-    center: true,
-    backgroundColor: Colors.transparent,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.hidden,
-    windowButtonVisibility: false,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-    await windowManager.setAlwaysOnTop(true);
-  });
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Minhas Tarefas',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: const Color(0xFF6272A4),
-        scaffoldBackgroundColor: const Color(0xFF282A36),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF44475A),
-        ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          foregroundColor: Color(0xFF282A36),
-        ),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF6272A4),
-          secondary: Color(0xFFFF79C6),
-          surface: Color(0xFF44475A),
-          error: Color(0xFFFF5555),
-        ),
-      ),
-      home: const MyHomePage(title: 'MyTasks'),
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> with WindowListener {
+class _HomeScreenState extends State<HomeScreen> with WindowListener {
   final TaskRepository _taskRepository = TaskRepository();
   List<Task> _tasks = [];
   bool _isCompactMode = false;
@@ -131,18 +72,6 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
     await _loadTasks();
   }
 
-  void _deleteTask(int index) async {
-    final task = _tasks[index];
-    await _taskRepository.deleteTask(task.id);
-    await _loadTasks();
-  }
-
-  void _toggleTaskCompletion(int index) async {
-    final task = _tasks[index];
-    await _taskRepository.updateTask(task);
-    await _loadTasks();
-  }
-
   void _sortTasks() {
     _tasks.sort((a, b) {
       if (a.isCompleted == b.isCompleted) {
@@ -188,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                 const SizedBox(
                   width: 5,
                 ),
-                Text(widget.title)
+                const Text('MyTasks')
               ],
             ),
             actions: [
@@ -217,34 +146,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                     const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
               ),
             )
-          : ListView.builder(
-              itemCount: _tasks.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    _tasks[index].title,
-                    style: TextStyle(
-                      decoration: _tasks[index].isCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                      color: _tasks[index].isCompleted
-                          ? Colors.grey
-                          : Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                  leading: Checkbox(
-                    value: _tasks[index].isCompleted,
-                    onChanged: (bool? value) {
-                      _toggleTaskCompletion(index);
-                    },
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => _deleteTask(index),
-                  ),
-                );
-              },
-            ),
+          : TaskList(taskRepository: _taskRepository),
       floatingActionButton: _isCompactMode
           ? null
           : FloatingActionButton(
