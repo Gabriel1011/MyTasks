@@ -2,18 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_tasks_app/shared/models/task.dart';
+import 'package:my_tasks_app/shared/widgets/task_floating_action.dart';
 import 'package:my_tasks_app/shared/widgets/task_list.dart';
 import 'package:window_manager/window_manager.dart';
-import '../../../shared/repositories/task_repository.dart';
+import '../../shared/repositories/task_repository.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreenDesktop extends StatefulWidget {
+  const HomeScreenDesktop({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreenDesktop> createState() => _HomeScreenDesktopState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WindowListener {
+class _HomeScreenDesktopState extends State<HomeScreenDesktop>
+    with WindowListener {
   final TaskRepository _taskRepository = TaskRepository();
   List<Task> _tasks = [];
   bool _isCompactMode = false;
@@ -62,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
     _taskRepository.getTasks().listen((tasks) {
       setState(() {
         _tasks = tasks;
-        _sortTasks();
       });
     });
   }
@@ -70,18 +71,6 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
   void _addTask(String taskTitle) async {
     await _taskRepository.addTask(taskTitle);
     await _loadTasks();
-  }
-
-  void _sortTasks() {
-    _tasks.sort((a, b) {
-      if (a.isCompleted == b.isCompleted) {
-        return 0;
-      }
-      if (a.isCompleted) {
-        return 1;
-      }
-      return -1;
-    });
   }
 
   int get _pendingTasksCount =>
@@ -149,45 +138,8 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
           : TaskList(taskRepository: _taskRepository),
       floatingActionButton: _isCompactMode
           ? null
-          : FloatingActionButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    String newTask = '';
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      title: const Text('Adicionar Tarefa'),
-                      content: TextField(
-                        onChanged: (value) {
-                          newTask = value;
-                        },
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancelar'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            if (newTask.isNotEmpty) {
-                              _addTask(newTask);
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Adicionar'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              tooltip: 'Adicionar Tarefa',
-              child: const Icon(Icons.add),
+          : TaskFloatingActionButton(
+              addTask: _addTask,
             ),
     );
   }

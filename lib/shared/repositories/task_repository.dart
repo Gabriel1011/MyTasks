@@ -7,10 +7,20 @@ class TaskRepository {
 
   Stream<List<Task>> getTasks() {
     return _tasksCollection.snapshots().map((snapshot) {
-      return snapshot.docs
+      List<Task> tasks = snapshot.docs
           .map(
               (doc) => Task.fromMap(doc.data() as Map<String, dynamic>, doc.id))
           .toList();
+
+      tasks.sort((a, b) {
+        if (a.isCompleted == b.isCompleted) {
+          return 0;
+        }
+
+        return a.isCompleted ? 1 : -1;
+      });
+
+      return tasks;
     });
   }
 

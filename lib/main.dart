@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:my_tasks_app/desktop_app/lib/screens/home_screen.dart';
-import 'package:my_tasks_app/desktop_app/lib/services/window_service.dart';
-import '../../../shared/services/firebase_service.dart';
+import 'package:my_tasks_app/desktop_app/screens/home_screen_desktop.dart';
+import 'package:my_tasks_app/mobile_app/screens/home_screen_mobile.dart';
+import 'package:my_tasks_app/shared/services/platform_service.dart';
+import '../shared/services/firebase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseService.initialize();
-  await WindowService.initialize();
+  await PlatformService.initialize();
   runApp(const MyApp());
 }
 
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
           error: Color(0xFFFF5555),
         ),
       ),
-      home: const HomeScreen(),
+      home: PlatformService.isDesktop
+          ? const HomeScreenDesktop()
+          : const HomeScreenMobile(),
     );
   }
 }
