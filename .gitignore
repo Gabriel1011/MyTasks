@@ -121,3 +121,5 @@ gradle-app.setting
 # Arquivos específicos do projeto (adicione conforme necessário)
 # config.json
 # secrets.yaml
+
+**/firebase_options.dart

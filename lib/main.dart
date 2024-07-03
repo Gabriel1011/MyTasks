@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_tasks_app/services/database_service.dart';
+import 'package:my_tasks_app/firebase_options.dart';
+import 'package:my_tasks_app/repositories/task_repository.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -24,6 +26,10 @@ void main() async {
     await windowManager.focus();
     await windowManager.setAlwaysOnTop(true);
   });
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MyApp());
 }
@@ -57,30 +63,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Task {
-  int? id;
-  String title;
-  bool isCompleted;
-
-  Task({this.id, required this.title, this.isCompleted = false});
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'isCompleted': isCompleted ? 1 : 0,
-    };
-  }
-
-  static Task fromMap(Map<String, dynamic> map) {
-    return Task(
-      id: map['id'],
-      title: map['title'],
-      isCompleted: map['isCompleted'] == 1,
-    );
-  }
-}
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -91,7 +73,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with WindowListener {
-  final DatabaseService _databaseService = DatabaseService();
+  final TaskRepository _taskRepository = TaskRepository();
   List<Task> _tasks = [];
   bool _isCompactMode = false;
   DateTime? _minimizedTime;
@@ -136,27 +118,28 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
   }
 
   Future<void> _loadTasks() async {
-    final tasks = await _databaseService.getTasks();
-    setState(() {
-      _tasks = tasks.map((map) => Task.fromMap(map)).toList();
-      _sortTasks();
+    _taskRepository.getTasks().listen((tasks) {
+      setState(() {
+        _tasks = tasks;
+        _sortTasks();
+      });
     });
   }
 
   void _addTask(String taskTitle) async {
-    await _databaseService.addTask(taskTitle);
+    await _taskRepository.addTask(taskTitle);
     await _loadTasks();
   }
 
   void _deleteTask(int index) async {
     final task = _tasks[index];
-    await _databaseService.deleteTask(task.id!);
+    await _taskRepository.deleteTask(task.id);
     await _loadTasks();
   }
 
   void _toggleTaskCompletion(int index) async {
     final task = _tasks[index];
-    await _databaseService.updateTask(task.id!, !task.isCompleted);
+    await _taskRepository.updateTask(task);
     await _loadTasks();
   }
 
