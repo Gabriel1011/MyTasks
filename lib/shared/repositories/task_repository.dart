@@ -6,7 +6,10 @@ class TaskRepository {
       FirebaseFirestore.instance.collection('tasks');
 
   Stream<List<Task>> getTasks() {
-    return _tasksCollection.snapshots().map((snapshot) {
+    return _tasksCollection
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
       List<Task> tasks = snapshot.docs
           .map(
               (doc) => Task.fromMap(doc.data() as Map<String, dynamic>, doc.id))
@@ -25,7 +28,11 @@ class TaskRepository {
   }
 
   Future<void> addTask(String title) async {
-    await _tasksCollection.add({'title': title, 'isCompleted': false});
+    await _tasksCollection.add({
+      'title': title,
+      'isCompleted': false,
+      'createdAt': Timestamp.fromDate(DateTime.now())
+    });
   }
 
   Future<void> updateTask(Task task) async {

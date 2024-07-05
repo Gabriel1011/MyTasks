@@ -20,7 +20,7 @@ class TaskList extends StatelessWidget {
           return const Center(child: Text('Nenhuma tarefa encontrada'));
         }
 
-        final tasks = snapshot.data!;
+        final tasks = snapshot.data!.toList();
         return ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (context, index) {

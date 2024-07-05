@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   cloud_firestore
   firebase_core
   screen_retriever
+  system_tray
   window_manager
 )
 

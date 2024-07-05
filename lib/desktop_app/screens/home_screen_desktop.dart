@@ -70,7 +70,6 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
 
   void _addTask(String taskTitle) async {
     await _taskRepository.addTask(taskTitle);
-    await _loadTasks();
   }
 
   int get _pendingTasksCount =>
@@ -91,7 +90,7 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(40),
+        preferredSize: Size.fromHeight(_isCompactMode ? 40 : 56),
         child: GestureDetector(
           onPanStart: (details) {
             windowManager.startDragging();
@@ -103,9 +102,7 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
                   Icons.check_box,
                   color: Theme.of(context).primaryColor,
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
+                const SizedBox(width: 5),
                 const Text('MyTasks')
               ],
             ),
