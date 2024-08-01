@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_tasks_app/shared/models/task.dart';
-import 'package:my_tasks_app/shared/widgets/task_floating_action.dart';
-import 'package:my_tasks_app/shared/widgets/task_list.dart';
+import 'package:my_tasks_app/shared/screems/home_screen.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../shared/repositories/task_repository.dart';
 
@@ -52,9 +51,8 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
         Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (_minimizedTime != null) {
         final minimizedDuration = DateTime.now().difference(_minimizedTime!);
-        if (minimizedDuration.inMinutes >= 5) {
+        if (minimizedDuration.inMinutes >= 25) {
           await windowManager.restore();
-          await windowManager.focus();
         }
       }
     });
@@ -66,10 +64,6 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
         _tasks = tasks;
       });
     });
-  }
-
-  void _addTask(String taskTitle) async {
-    await _taskRepository.addTask(taskTitle);
   }
 
   int get _pendingTasksCount =>
@@ -132,12 +126,7 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
                     const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
               ),
             )
-          : TaskList(taskRepository: _taskRepository),
-      floatingActionButton: _isCompactMode
-          ? null
-          : TaskFloatingActionButton(
-              addTask: _addTask,
-            ),
+          : HomeScreen(),
     );
   }
 }
