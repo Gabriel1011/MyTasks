@@ -35,7 +35,8 @@ class AppFloatingActionState extends State<AppFloatingAction> {
                             AddNoteModal(addNote: widget.addNote),
                       ).then((_) => setState(() {
                             _isExpanded = false;
-                          }))),
+                          })),
+                  'Note'),
               _buildMiniButton(
                   Icons.task,
                   () => showDialog(
@@ -44,7 +45,8 @@ class AppFloatingActionState extends State<AppFloatingAction> {
                             AddTaskModal(addTask: widget.addTask),
                       ).then((_) => setState(() {
                             _isExpanded = false;
-                          }))),
+                          })),
+                  'Task'),
             ],
           ),
         ),
@@ -62,8 +64,9 @@ class AppFloatingActionState extends State<AppFloatingAction> {
     );
   }
 
-  Widget _buildMiniButton(IconData icon, VoidCallback onPressed) {
+  Widget _buildMiniButton(IconData icon, VoidCallback onPressed, String tag) {
     return FloatingActionButton.small(
+      heroTag: tag,
       onPressed: onPressed,
       child: Icon(icon),
     );

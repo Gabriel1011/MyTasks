@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_tasks_app/shared/models/task.dart';
 import 'package:my_tasks_app/shared/screems/home_screen.dart';
+import 'package:my_tasks_app/shared/widgets/logout_buttom.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../shared/repositories/task_repository.dart';
 
@@ -86,9 +87,7 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(_isCompactMode ? 40 : 56),
         child: GestureDetector(
-          onPanStart: (details) {
-            windowManager.startDragging();
-          },
+          onPanStart: (_) => windowManager.startDragging(),
           child: AppBar(
             title: Row(
               children: [
@@ -97,7 +96,9 @@ class _HomeScreenDesktopState extends State<HomeScreenDesktop>
                   color: Theme.of(context).primaryColor,
                 ),
                 const SizedBox(width: 5),
-                const Text('MyTasks')
+                const Text('MyTasks'),
+                const SizedBox(width: 5),
+                LogoutButton()
               ],
             ),
             actions: [
